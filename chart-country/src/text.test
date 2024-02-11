@@ -1,0 +1,54 @@
+    const search_first_country = async () => {
+        first_temp_day.value = []
+        first_temp_night.value = []
+        first_chart_data.value = [];
+        first_weather_data.value = null;
+        first_country_day.value = [];
+        first_temp_mid.value = [];
+        const response = await axios.get(`https://pro.openweathermap.org/data/2.5/forecast/climate?q=${city_1.value}&units=metric&cnt=20&appid=e4479f3a20fa8233858804a5fa06b0c4`)
+        first_weather_data.value = response.data
+        first_chart_data.value = response.data.list
+        console.log('dataList:', first_chart_data.value)
+        console.log('search1 :', first_weather_data.value)
+        response.data.list.forEach((item) => {
+            const dateObj = new Date(item.dt * 1000)
+            item.dt = dateObj.toLocaleDateString("en-US")
+            const day_of_week = dateObj.getDay()
+            first_country_day.value.push(weekday[day_of_week])
+            const midTemp = ((item.temp.min + item.temp.max) / 2)
+            first_temp_mid.value.push(midTemp)
+            first_temp_day.value.push(item.temp.day)
+            first_temp_night.value.push(item.temp.night)
+
+        })
+        loadChart1.value = true
+        console.log('mid', first_temp_mid)
+        console.log('day', first_country_day)
+        console.log('temp-day', first_temp_day)
+        console.log('temp-night', second_temp_night)
+    }
+    const search_second_country = async () => {
+        second_temp_night.value = []
+        second_temp_day.value = []
+        second_chart_data.value = []
+        second_weather_data.value = []
+        second_country_day.value = []
+        second_temp_mid.value = []
+        const response = await axios.get(`https://pro.openweathermap.org/data/2.5/forecast/climate?q=${city_2.value}&units=metric&cnt=20&appid=e4479f3a20fa8233858804a5fa06b0c4`)
+        second_weather_data.value = response.data
+        second_chart_data.value = response.data.list
+        response.data.list.forEach((item) => {
+            const dateObj = new Date(item.dt * 1000)
+            item.dt = dateObj.toLocaleDateString("en-US")
+            const day_of_week2 = dateObj.getDay()
+            second_country_day.value.push(weekday[day_of_week2])
+            second_temp_mid.value.push((item.temp.min + item.temp.max) / 2)
+            second_temp_day.value.push(item.temp.day)
+            second_temp_night.value.push(item.temp.night)
+        })
+        loadChart2.value = true
+        console.log('mid', second_temp_mid)
+        console.log('day', second_country_day)
+        console.log('tem-day', second_temp_day)
+        console.log('temp-night', second_temp_night)
+    }
